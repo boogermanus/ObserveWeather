@@ -1,7 +1,8 @@
 ﻿@page "/Location"
 @using LeafletForBlazor
+@using ObserveWeather.Blazor.ApiModels
 @inject HttpClient Client
-@rendermode @(new InteractiveServerRenderMode(prerender:false))
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <div class="row justify-content-center">
     <div class="col-4 text-center">
@@ -19,12 +20,19 @@
     <div class="col-2 text-center">@_location?.longitude</div>
 </div>
 
+<div class="row">@_point?.Id</div>
+<div class="row">@_point?.Properties.RadarStation</div>
+<div class="row">@_point?.Properties.RelativeLocation.Properties.City</div>
+<div class="row">@_point?.Properties.RelativeLocation.Properties.State</div>
+
 @code{
-    
+
     private RealTimeMap? _realTimeMap;
 
     private RealTimeMap.Location? _location;
-    
+
+    private Point? _point;
+
     readonly RealTimeMap.LoadParameters _parameters = new()
     {
         basemap = new RealTimeMap.Basemap
@@ -62,10 +70,10 @@
         await GetPoints(_location);
     }
 
-    public async Task GetPoints(RealTimeMap.Location location)
+    private async Task GetPoints(RealTimeMap.Location location)
     {
-        var result = await Client.GetFromJsonAsync<dynamic>($"points/{location.latitude},{location.longitude}");
-        
-        Console.WriteLine(result);
+        var result = await Client.GetFromJsonAsync<Point>($"points/{location.latitude},{location.longitude}");
+        _point = result;
     }
+
 }

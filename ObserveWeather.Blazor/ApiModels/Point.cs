@@ -2,5 +2,6 @@
 
 public class Point
 {
-    public string id { get; set; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
+    public PointProperties Properties { get; set; } = new PointProperties();
 }

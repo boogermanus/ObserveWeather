@@ -2,5 +2,6 @@
 
 public class PointProperties
 {
-    public string radarStation { get; set; } = string.Empty;
+    public RelativeLocation RelativeLocation { get; set; } = new RelativeLocation();
+    public string RadarStation { get; set; } = string.Empty;
 }
