@@ -1,0 +1,26 @@
+﻿@page "/Location"
+@using LeafletForBlazor
+<h1>Location</h1>
+
+<RealTimeMap Parameters="@parameters" height="460px" width="620px"></RealTimeMap>
+
+@code{
+
+    RealTimeMap.LoadParameters parameters = new()
+    {
+        basemap = new RealTimeMap.Basemap
+        {
+            basemapLayers = new List<RealTimeMap.BasemapLayer>()
+            {
+                new RealTimeMap.BasemapLayer()
+                {
+                    url = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    attribution = "©Open Street Map",
+                    title = "Open Street Map",
+                    detectRetina = true
+                },
+            }
+        }
+    };
+
+}
