@@ -1,5 +1,6 @@
 ﻿@page "/Location"
 @using LeafletForBlazor
+@inject HttpClient Client
 @rendermode @(new InteractiveServerRenderMode(prerender:false))
 
 <div class="row justify-content-center">
@@ -19,17 +20,11 @@
 </div>
 
 @code{
-
+    
     private RealTimeMap? _realTimeMap;
 
     private RealTimeMap.Location? _location;
-
-    public async Task OnClickMap(RealTimeMap.ClicksMapArgs args)
-    {
-        _location = args.location;
-        await _realTimeMap?.movePoint([_location.latitude, _location.longitude]);
-    }
-
+    
     readonly RealTimeMap.LoadParameters _parameters = new()
     {
         basemap = new RealTimeMap.Basemap
@@ -60,4 +55,17 @@
         zoomLevel = 5,
     };
 
+    public async Task OnClickMap(RealTimeMap.ClicksMapArgs args)
+    {
+        _location = args.location;
+        await _realTimeMap?.movePoint([_location.latitude, _location.longitude]);
+        await GetPoints(_location);
+    }
+
+    public async Task GetPoints(RealTimeMap.Location location)
+    {
+        var result = await Client.GetFromJsonAsync<dynamic>($"points/{location.latitude},{location.longitude}");
+        
+        Console.WriteLine(result);
+    }
 }

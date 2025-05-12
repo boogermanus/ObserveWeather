@@ -40,8 +40,17 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("api.weather.gov", options =>
+{
+    options.BaseAddress = new Uri("https://api.weather.gov/");
+    options.DefaultRequestHeaders.Add("User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)");
+});
 
+builder.Services.AddScoped(s => new HttpClient()
+{
+    BaseAddress = new Uri("https://api.weather.gov/"),
+    DefaultRequestHeaders = { {"User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"} }
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,7 +65,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
