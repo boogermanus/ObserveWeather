@@ -2,11 +2,11 @@
 @using LeafletForBlazor
 <h1>Location</h1>
 
-<RealTimeMap Parameters="@parameters" height="460px" width="620px"></RealTimeMap>
+<RealTimeMap Parameters="@_parameters" height="460px" width="620px"></RealTimeMap>
 
 @code{
 
-    RealTimeMap.LoadParameters parameters = new()
+    RealTimeMap.LoadParameters _parameters = new()
     {
         basemap = new RealTimeMap.Basemap
         {
@@ -20,7 +20,13 @@
                     detectRetina = true
                 },
             }
-        }
+        },
+        location = new RealTimeMap.Location()
+        {
+            latitude = 33.67,
+            longitude = -101.82
+        },
+        zoomLevel = 10
     };
 
 }
