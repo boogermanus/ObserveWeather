@@ -1,41 +1,49 @@
 ﻿@page "/Location"
 @using LeafletForBlazor
-<h1>Location</h1>
-<RealTimeMap Parameters="@_parameters" height="460px" width="620px" OnClickMap="OnClickMap" @ref="_realTimeMap"></RealTimeMap>
-<div class="row">
-    <div class="col-2">@_location?.latitude</div>
-    <div class="col-2">@_location?.longitude</div>
+@rendermode @(new InteractiveServerRenderMode(prerender:false))
+
+<div class="row justify-content-center">
+    <div class="col-4 text-center">
+        <h1>Location</h1>
+    </div>
+</div>
+<div class="d-flex flex-row justify-content-center">
+    <div class="flex-column">
+        <RealTimeMap Parameters="@_parameters" height="460px" width="800px" OnClickMap="OnClickMap"
+                     @ref="_realTimeMap"></RealTimeMap>
+    </div>
+</div>
+<div class="row justify-content-center">
+    <div class="col-2 text-center">@_location?.latitude</div>
+    <div class="col-2 text-center">@_location?.longitude</div>
 </div>
 
 @code{
 
     private RealTimeMap? _realTimeMap;
-    
-    private RealTimeMap.Location? _location = new RealTimeMap.Location()
-    {
-        latitude = 33.62,
-        longitude = -101.82
-    };
-    
-    public void OnClickMap(RealTimeMap.ClicksMapArgs args)
+
+    private RealTimeMap.Location? _location;
+
+    public async Task OnClickMap(RealTimeMap.ClicksMapArgs args)
     {
         _location = args.location;
-        _realTimeMap?.movePoint([_location.latitude, _location.longitude]);
+        await _realTimeMap?.movePoint([_location.latitude, _location.longitude]);
     }
-    RealTimeMap.LoadParameters _parameters = new()
+
+    readonly RealTimeMap.LoadParameters _parameters = new()
     {
         basemap = new RealTimeMap.Basemap
         {
-            basemapLayers = new List<RealTimeMap.BasemapLayer>()
+            basemapLayers = new List<RealTimeMap.BasemapLayer>
             {
-                new RealTimeMap.BasemapLayer()
+                new()
                 {
                     url = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     attribution = "©Open Street Map",
                     title = "Open Street Map",
                     detectRetina = true
                 },
-                new RealTimeMap.BasemapLayer()
+                new()
                 {
                     url = "https://tile.opentopomap.org/{z}/{x}/{y}.png",
                     attribution = "Open Topo",
@@ -44,12 +52,12 @@
                 },
             }
         },
-        location = new RealTimeMap.Location()
+        location = new RealTimeMap.Location
         {
             latitude = 33.67,
             longitude = -101.82
         },
-        zoomLevel = 10,
+        zoomLevel = 5,
     };
 
 }
