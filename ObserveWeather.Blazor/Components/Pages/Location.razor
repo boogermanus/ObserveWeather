@@ -1,11 +1,27 @@
 ﻿@page "/Location"
 @using LeafletForBlazor
 <h1>Location</h1>
-
-<RealTimeMap Parameters="@_parameters" height="460px" width="620px"></RealTimeMap>
+<RealTimeMap Parameters="@_parameters" height="460px" width="620px" OnClickMap="OnClickMap" @ref="_realTimeMap"></RealTimeMap>
+<div class="row">
+    <div class="col-2">@_location?.latitude</div>
+    <div class="col-2">@_location?.longitude</div>
+</div>
 
 @code{
 
+    private RealTimeMap? _realTimeMap;
+    
+    private RealTimeMap.Location? _location = new RealTimeMap.Location()
+    {
+        latitude = 33.62,
+        longitude = -101.82
+    };
+    
+    public void OnClickMap(RealTimeMap.ClicksMapArgs args)
+    {
+        _location = args.location;
+        _realTimeMap?.movePoint([_location.latitude, _location.longitude]);
+    }
     RealTimeMap.LoadParameters _parameters = new()
     {
         basemap = new RealTimeMap.Basemap
@@ -19,6 +35,13 @@
                     title = "Open Street Map",
                     detectRetina = true
                 },
+                new RealTimeMap.BasemapLayer()
+                {
+                    url = "https://tile.opentopomap.org/{z}/{x}/{y}.png",
+                    attribution = "Open Topo",
+                    title = "Open Topo",
+                    detectRetina = true
+                },
             }
         },
         location = new RealTimeMap.Location()
@@ -26,7 +49,7 @@
             latitude = 33.67,
             longitude = -101.82
         },
-        zoomLevel = 10
+        zoomLevel = 10,
     };
 
 }
