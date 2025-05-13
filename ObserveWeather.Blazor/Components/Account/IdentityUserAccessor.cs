@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using ObserveWeather.Blazor.Data;
 
@@ -14,12 +15,5 @@ internal sealed class IdentityUserAccessor(UserManager<ApplicationUser> userMana
         }
 
         return user;
-    }
-
-    public async Task<string?> GetUserIdAsync(HttpContext context)
-    {
-        var user = await userManager.GetUserAsync(context.User);
-
-        return user?.Id;
     }
 }

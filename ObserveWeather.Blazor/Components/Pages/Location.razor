@@ -1,47 +1,50 @@
 ﻿@page "/Location"
+@using System.Security.Claims
 @using LeafletForBlazor
+@using Microsoft.AspNetCore.Authorization
+@using ObserveWeather.Blazor.Components.Account
 @using ObserveWeather.Blazor.Core.ApiModels
 @inject HttpClient Client
-@inject IJSRuntime JsRuntime
-
+@inject IHttpContextAccessor Context
 @rendermode InteractiveServer
-
+@attribute [Authorize]
 
 <PageTitle>Location</PageTitle>
-<div class="row">
-    <h1>Location</h1>
-</div>
-
-<div class="container">
+<AuthorizeView>
     <div class="row">
-        <RealTimeMap Parameters="@_parameters" height="50vh" width="80hw" OnClickMap="OnClickMap"
-                     @ref="Map"></RealTimeMap>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">Latitude: @_latitude</div>
-        <div class="col-sm-2">Longitude: @_longitude</div>
+        <h1>Location</h1>
     </div>
 
-    @if (_point == null && _loading)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-        if (_dataLoaded)
+    <div class="container">
+        <div class="row">
+            <RealTimeMap Parameters="@_parameters" height="50vh" width="80hw" OnClickMap="OnClickMap"
+                         @ref="Map"></RealTimeMap>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">Latitude: @_latitude</div>
+            <div class="col-sm-2">Longitude: @_longitude</div>
+        </div>
+
+        @if (_point == null && _loading)
         {
-            <div class="row">
-                <div class="col-md-6">
-                    @City, @State - @RadarStation
-                    <button class="btn btn-primary" @onclick="() => Add(RadarStation)">Add</button>
-                </div>
-            </div>
+            <p><em>Loading...</em></p>
         }
-    }
-</div>
+        else
+        {
+            if (_dataLoaded)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        @City, @State - @RadarStation
+                        <button class="btn btn-primary" @onclick="() => Add(RadarStation)">Add</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</AuthorizeView>
 
 @code{
-
     public required RealTimeMap Map;
     private RealTimeMap.Location? _location;
     private Point? _point;
@@ -89,7 +92,7 @@
     {
         _latitude = DefaultLatitude;
         _longitude = DefaultLongitude;
-        
+
         base.OnInitialized();
     }
 
@@ -111,10 +114,12 @@
     {
         var result = await Client.GetFromJsonAsync<Point>($"points/{location.latitude},{location.longitude}");
         _point = result;
+        
     }
 
     private void Add(string station)
     {
+        Console.WriteLine(Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
         Console.WriteLine(station);
     }
 
