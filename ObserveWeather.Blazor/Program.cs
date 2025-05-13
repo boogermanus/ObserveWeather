@@ -32,6 +32,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
         options.Password.RequireUppercase = true;
+        options.Password.RequireDigit = false;
         options.Password.RequireNonAlphanumeric = true;
         options.User.RequireUniqueEmail = true;
     })
