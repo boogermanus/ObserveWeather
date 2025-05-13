@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ObserveWeather.Blazor.Core.ApiModels;
 using ObserveWeather.Blazor.Data;
 
 namespace ObserveWeather.Blazor.Core.Models;
@@ -7,10 +8,21 @@ namespace ObserveWeather.Blazor.Core.Models;
 public class UserStation
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
+    [MaxLength(4)]
     public required string StationId { get; set; }
+    [MaxLength(36)]
     public required string UserId { get; set; }
     public ApplicationUser? User { get; set; }
+
+    public UserStationModel ToApiModel()
+    {
+        return new UserStationModel
+        {
+            StationId = StationId,
+            UserId = UserId,
+        };
+    }
     
 }
