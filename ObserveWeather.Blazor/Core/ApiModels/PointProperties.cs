@@ -1,4 +1,4 @@
-﻿namespace ObserveWeather.Blazor.ApiModels;
+﻿namespace ObserveWeather.Blazor.Core.ApiModels;
 
 public class PointProperties
 {
