@@ -20,6 +20,7 @@ public class UserStation
     {
         return new UserStationModel
         {
+            Id = Id,
             StationId = StationId,
             UserId = UserId,
         };
