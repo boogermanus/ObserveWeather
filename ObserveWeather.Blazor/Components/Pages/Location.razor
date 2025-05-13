@@ -61,23 +61,25 @@
     {
         basemap = new RealTimeMap.Basemap
         {
-            basemapLayers = new List<RealTimeMap.BasemapLayer>
-            {
-                new()
+            basemapLayers =
+            [
+                new RealTimeMap.BasemapLayer
                 {
                     url = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     attribution = "©Open Street Map",
                     title = "Open Street Map",
                     detectRetina = true
                 },
-                new()
+
+                new RealTimeMap.BasemapLayer
                 {
                     url = "https://tile.opentopomap.org/{z}/{x}/{y}.png",
                     attribution = "Open Topo",
                     title = "Open Topo",
                     detectRetina = true
-                },
-            }
+                }
+
+            ]
         },
         location = new RealTimeMap.Location
         {
