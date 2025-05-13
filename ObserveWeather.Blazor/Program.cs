@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ObserveWeather.Blazor.Components;
 using ObserveWeather.Blazor.Components.Account;
+using ObserveWeather.Blazor.Core.Interfaces;
+using ObserveWeather.Blazor.Core.Services;
 using ObserveWeather.Blazor.Data;
+using ObserveWeather.Blazor.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,11 +44,14 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-builder.Services.AddScoped(s => new HttpClient()
+builder.Services.AddScoped(s => new HttpClient
 {
     BaseAddress = new Uri("https://api.weather.gov/"),
     DefaultRequestHeaders = { {"User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"} }
 });
+builder.Services.AddScoped<IUserStationRepository, UserStationRepository>();
+builder.Services.AddScoped<ILocationService, LocationService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
