@@ -4,14 +4,12 @@
 @inject HttpClient Client
 @rendermode InteractiveServer
 
+
+<PageTitle>Location</PageTitle>
+
 <div class="row">
-    <div class="col-4 text-center">
-        <h1>Location</h1>
-    </div>
-</div>
-<div class="row">
-<RealTimeMap Parameters="@_parameters" height="460px" width="620px" OnClickMap="OnClickMap"
-             @ref="Map"></RealTimeMap>
+    <RealTimeMap Parameters="@_parameters" height="460px" width="620px" OnClickMap="OnClickMap"
+                 @ref="Map"></RealTimeMap>
 </div>
 <div class="row">
     <div class="col-sm-2">Latitude: @_latitude</div>
@@ -44,8 +42,8 @@ else
     private const double DefaultLongitude = -101.82;
     private double _latitude;
     private double _longitude;
-    private bool _loading = false;
-    private bool _dataLoaded = false;
+    private bool _loading;
+    private bool _dataLoaded;
     private string City => _point?.Properties.RelativeLocation.Properties.City ?? string.Empty;
     private string State => _point?.Properties.RelativeLocation.Properties.State ?? string.Empty;
     private string RadarStation => _point?.Properties.RadarStation ?? string.Empty;

@@ -40,12 +40,6 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-builder.Services.AddHttpClient("api.weather.gov", options =>
-{
-    options.BaseAddress = new Uri("https://api.weather.gov/");
-    options.DefaultRequestHeaders.Add("User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)");
-});
-
 builder.Services.AddScoped(s => new HttpClient()
 {
     BaseAddress = new Uri("https://api.weather.gov/"),
