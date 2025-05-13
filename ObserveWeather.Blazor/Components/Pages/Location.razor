@@ -10,28 +10,45 @@
     </div>
 </div>
 <div class="row">
-<RealTimeMap Parameters="@_parameters" height="460px" width="800px" OnClickMap="OnClickMap"
-             @ref="RealTimeMap"></RealTimeMap>
+<RealTimeMap Parameters="@_parameters" height="460px" width="620px" OnClickMap="OnClickMap"
+             @ref="Map"></RealTimeMap>
 </div>
 <div class="row">
-    <div class="col-sm-2">Latitude</div>
-    <div class="col-md-2">@_location?.latitude</div>
-    <div class="col-md-2">Longitude</div>
-    <div class="col-md-2">@_location?.longitude</div>
+    <div class="col-sm-2">Latitude: @_latitude</div>
+    <div class="col-sm-2">Longitude: @_longitude</div>
 </div>
 
-<div class="row">@_point?.Id</div>
-<div class="row">@_point?.Properties.RadarStation</div>
-<div class="row">@_point?.Properties.RelativeLocation.Properties.City</div>
-<div class="row">@_point?.Properties.RelativeLocation.Properties.State</div>
+@if (_point == null && _loading)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    if (_dataLoaded)
+    {
+        <div class="row">
+            <div class="col-md-6">
+                @City, @State - @RadarStation
+                <button class="btn btn-primary" @onclick="() => Add(RadarStation)">Add</button>
+            </div>
+        </div>
+    }
+}
 
 @code{
 
-    public required RealTimeMap RealTimeMap;
-
+    public required RealTimeMap Map;
     private RealTimeMap.Location? _location;
-
     private Point? _point;
+    private const double DefaultLatitude = 33.67;
+    private const double DefaultLongitude = -101.82;
+    private double _latitude;
+    private double _longitude;
+    private bool _loading = false;
+    private bool _dataLoaded = false;
+    private string City => _point?.Properties.RelativeLocation.Properties.City ?? string.Empty;
+    private string State => _point?.Properties.RelativeLocation.Properties.State ?? string.Empty;
+    private string RadarStation => _point?.Properties.RadarStation ?? string.Empty;
 
     private readonly RealTimeMap.LoadParameters _parameters = new()
     {
@@ -57,23 +74,42 @@
         },
         location = new RealTimeMap.Location
         {
-            latitude = 33.67,
-            longitude = -101.82
+            latitude = DefaultLatitude,
+            longitude = DefaultLongitude
         },
         zoomLevel = 5,
     };
 
+    protected override void OnInitialized()
+    {
+        _latitude = DefaultLatitude;
+        _longitude = DefaultLongitude;
+        base.OnInitialized();
+    }
+
     public async Task OnClickMap(RealTimeMap.ClicksMapArgs args)
     {
+        _point = null;
+        _loading = true;
+        _dataLoaded = false;
         _location = args.location;
-        await RealTimeMap.movePoint([_location.latitude, _location.longitude]);
+        await Map.movePoint([_location.latitude, _location.longitude]);
+        _latitude = Math.Round(_location.latitude, 3);
+        _longitude = Math.Round(_location.longitude, 3);
         await GetPoints(_location);
+        _loading = false;
+        _dataLoaded = true;
     }
 
     private async Task GetPoints(RealTimeMap.Location location)
     {
         var result = await Client.GetFromJsonAsync<Point>($"points/{location.latitude},{location.longitude}");
         _point = result;
+    }
+
+    private void Add(string station)
+    {
+        Console.WriteLine(station);
     }
 
 }
