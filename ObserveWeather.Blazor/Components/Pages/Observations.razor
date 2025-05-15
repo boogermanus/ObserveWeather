@@ -29,8 +29,6 @@
     }
 </div>
 
-
-
 @code {
     private IEnumerable<UserStationModel>? _stations;
     private string? UserId => Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
