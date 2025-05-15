@@ -3,8 +3,10 @@
 @using LeafletForBlazor
 @using Microsoft.AspNetCore.Authorization
 @using ObserveWeather.Blazor.Core.ApiModels
+@using ObserveWeather.Blazor.Core.Interfaces
 @inject HttpClient Client
 @inject IHttpContextAccessor Context
+@inject ILocationService LocationService
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -35,7 +37,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         @City, @State - @RadarStation
-                        <button class="btn btn-primary" @onclick="() => Add(RadarStation)">Add</button>
+                        <button class="btn btn-primary" @onclick="Add">Add</button>
                     </div>
                 </div>
             }
@@ -47,8 +49,8 @@
     public required RealTimeMap Map;
     private RealTimeMap.Location? _location;
     private Point? _point;
-    private const double DefaultLatitude = 33.67;
-    private const double DefaultLongitude = -101.82;
+    private const double DefaultLatitude = 33.670;
+    private const double DefaultLongitude = -101.820;
     private double _latitude;
     private double _longitude;
     private bool _loading;
@@ -118,10 +120,10 @@
         
     }
 
-    private void Add(string station)
+    private async Task Add()
     {
-        Console.WriteLine(Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier));
-        Console.WriteLine(station);
+        var userId = Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        await LocationService.AddAsync(_point, userId);
     }
 
 }
