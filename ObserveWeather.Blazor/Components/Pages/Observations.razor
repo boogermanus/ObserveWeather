@@ -5,27 +5,38 @@
 @inject IHttpContextAccessor Context
 @inject ILocationService LocationService
 
+<PageTitle>Observations</PageTitle>
 <h1>Observations</h1>
-@if (_stations == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <ul>
-    @foreach (var station in _stations)
+
+<div class="container">
+
+    @if (_stations == null)
     {
-        <li>@station.DisplayName</li>
+        <p><em>Loading...</em></p>
     }
-    </ul>
-}
+    else
+    {
+        foreach (var station in _stations)
+        {
+            <div class="row m-2">
+                <div class="col-md-2">@station.DisplayName</div>
+                <div class="col-md-1">
+                    <button class="btn btn-primary">Delete</button>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
 @code {
     private IEnumerable<UserStationModel>? _stations;
 
     protected override async Task OnInitializedAsync()
     {
         var userId = Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        _stations = 
+        _stations =
             await LocationService.GetForUserAsync(userId);
     }
 
