@@ -13,6 +13,7 @@ public class UserStationModel
     {
         return new UserStation
         {
+            Id = Id,
             StationId = StationId,
             UserId = UserId,
             DisplayName = DisplayName,

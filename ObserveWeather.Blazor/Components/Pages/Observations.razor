@@ -2,6 +2,7 @@
 @using System.Security.Claims
 @using ObserveWeather.Blazor.Core.ApiModels
 @using ObserveWeather.Blazor.Core.Interfaces
+@rendermode InteractiveServer
 @inject IHttpContextAccessor Context
 @inject ILocationService LocationService
 
@@ -21,7 +22,7 @@
             <div class="row m-2">
                 <div class="col-md-2">@station.DisplayName</div>
                 <div class="col-md-1">
-                    <button class="btn btn-primary">Delete</button>
+                    <button class="btn btn-primary" @onclick="() => Delete(station)">Delete</button>
                 </div>
             </div>
         }
@@ -32,12 +33,18 @@
 
 @code {
     private IEnumerable<UserStationModel>? _stations;
-
+    private string? UserId => Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     protected override async Task OnInitializedAsync()
     {
         var userId = Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         _stations =
             await LocationService.GetForUserAsync(userId);
+    }
+
+    private async Task Delete(UserStationModel model)
+    {
+        await LocationService.DeleteAsync(model);
+        _stations = await LocationService.GetForUserAsync(UserId);
     }
 
 }

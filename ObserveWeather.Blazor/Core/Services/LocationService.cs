@@ -39,4 +39,10 @@ public class LocationService : ILocationService
         
         return results.Select(r => r.ToApiModel()).ToList();
     }
+
+    public async Task<UserStationModel?> DeleteAsync(UserStationModel model)
+    {
+        var result = await _userStationRepository.DeleteAsync(model.ToDomainModel());
+        return result?.ToApiModel();
+    }
 }

@@ -6,4 +6,5 @@ public interface ILocationService
 {
     Task<UserStationModel?> AddAsync(Point? point, string? userId);
     Task<IEnumerable<UserStationModel>> GetForUserAsync(string? userId);
+    Task<UserStationModel?> DeleteAsync(UserStationModel model);
 }
