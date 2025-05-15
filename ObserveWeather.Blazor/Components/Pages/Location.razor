@@ -32,14 +32,21 @@
         }
         else
         {
-            if (_dataLoaded)
+            if (_dataLoaded && !_alreadyHave)
             {
                 <div class="row">
                     <div class="col-md-6">
                         @City, @State - @RadarStation
-                        <button class="btn btn-primary" @onclick="Add">Add</button>
+                        <button class="btn btn-primary" @onclick="Add" disabled="@_addDisabled">Add</button>
                     </div>
                 </div>
+            }
+            else
+            {
+                @if (_dataLoaded)
+                {
+                    <p>You've already added this location</p>
+                }
             }
         }
     </div>
@@ -47,7 +54,6 @@
 
 @code{
     public required RealTimeMap Map;
-    private RealTimeMap.Location? _location;
     private Point? _point;
     private const double DefaultLatitude = 33.670;
     private const double DefaultLongitude = -101.820;
@@ -55,9 +61,12 @@
     private double _longitude;
     private bool _loading;
     private bool _dataLoaded;
+    private bool _addDisabled = false;
     private string City => _point?.Properties.RelativeLocation.Properties.City ?? string.Empty;
     private string State => _point?.Properties.RelativeLocation.Properties.State ?? string.Empty;
     private string RadarStation => _point?.Properties.RadarStation ?? string.Empty;
+    private bool _alreadyHave;
+    private string? UserId => Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
     private readonly RealTimeMap.LoadParameters _parameters = new()
     {
@@ -80,7 +89,6 @@
                     title = "Open Topo",
                     detectRetina = true
                 }
-
             ]
         },
         location = new RealTimeMap.Location
@@ -104,11 +112,12 @@
         _point = null;
         _loading = true;
         _dataLoaded = false;
-        _location = args.location;
-        await Map.movePoint([_location.latitude, _location.longitude]);
-        _latitude = Math.Round(_location.latitude, 3);
-        _longitude = Math.Round(_location.longitude, 3);
-        await GetPoints(_location);
+        var location = args.location;
+        _addDisabled = false;
+        await Map.movePoint([location.latitude, location.longitude]);
+        _latitude = Math.Round(location.latitude, 3);
+        _longitude = Math.Round(location.longitude, 3);
+        await GetPoints(location);
         _loading = false;
         _dataLoaded = true;
     }
@@ -116,14 +125,26 @@
     private async Task GetPoints(RealTimeMap.Location location)
     {
         var result = await Client.GetFromJsonAsync<Point>($"points/{location.latitude},{location.longitude}");
-        _point = result;
-        
+        var userStations = await LocationService.GetForUserAsync(UserId);
+
+        if (result != null)
+        {
+            if (userStations.Any(us => us.StationId == result.Properties.RadarStation))
+            {
+                _alreadyHave = true;
+            }
+            else
+            {
+                _point = result;
+                _alreadyHave = false;
+            }
+        }
     }
 
     private async Task Add()
     {
-        var userId = Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        await LocationService.AddAsync(_point, userId);
+        await LocationService.AddAsync(_point, UserId);
+        _addDisabled = true;
     }
 
 }

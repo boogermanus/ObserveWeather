@@ -14,6 +14,9 @@ public class LocationService : ILocationService
     }
     public async Task<UserStationModel?> AddAsync(Point? point, string? userId)
     {
+        ArgumentNullException.ThrowIfNull(point);
+        ArgumentNullException.ThrowIfNull(userId);
+        
         var displayName =
             $"{point.Properties.RelativeLocation.Properties.City}, {point.Properties.RelativeLocation.Properties.State}";
         var userStation = new UserStation
@@ -30,6 +33,8 @@ public class LocationService : ILocationService
 
     public async Task<IEnumerable<UserStationModel>> GetForUserAsync(string? userId)
     {
+        ArgumentNullException.ThrowIfNull(userId);
+        
         var results = await _userStationRepository.GetForUserAsync(userId);
         
         return results.Select(r => r.ToApiModel()).ToList();
