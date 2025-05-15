@@ -34,9 +34,8 @@
     private string? UserId => Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
     protected override async Task OnInitializedAsync()
     {
-        var userId = Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
         _stations =
-            await LocationService.GetForUserAsync(userId);
+            await LocationService.GetForUserAsync(UserId);
     }
 
     private async Task Delete(UserStationModel model)
