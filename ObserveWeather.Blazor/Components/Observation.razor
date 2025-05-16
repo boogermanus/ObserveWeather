@@ -1,0 +1,15 @@
+﻿@using ObserveWeather.Blazor.Core.ApiModels
+@inject HttpClient Client
+<h3>Current Observations</h3>
+<p>@UserStationModel?.DisplayName</p>
+<p>@ObservationModel?.Properties.Temperature.Value</p>
+@code {
+    [Parameter]
+    public UserStationModel? UserStationModel { get; set; }
+    private Core.ApiModels.Observation? ObservationModel { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        ObservationModel = await Client.GetFromJsonAsync<Core.ApiModels.Observation>($"stations/{UserStationModel?.StationId}/observations/latest");
+    }
+
+}

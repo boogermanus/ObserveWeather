@@ -49,6 +49,11 @@ builder.Services.AddScoped(s => new HttpClient
     BaseAddress = new Uri("https://api.weather.gov/"),
     DefaultRequestHeaders = { {"User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"} }
 });
+// builder.Services.AddHttpClient("api.weather.gov", client =>
+// {
+//     client.BaseAddress = new Uri("https://api.weather.gov/");
+//     client.DefaultRequestHeaders.Add("User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"); 
+// });
 builder.Services.AddScoped<IUserStationRepository, UserStationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 
