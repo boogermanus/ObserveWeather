@@ -1,7 +1,5 @@
 ﻿@using ObserveWeather.Blazor.Core.ApiModels
-@inject HttpClient Client
-<h3>Current Observations</h3>
-<p>@UserStationModel?.DisplayName</p>
+@inject IHttpClientFactory Factory
 <p>@ObservationModel?.Properties.Temperature.Value</p>
 @code {
     [Parameter]
@@ -9,7 +7,8 @@
     private Core.ApiModels.Observation? ObservationModel { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        ObservationModel = await Client.GetFromJsonAsync<Core.ApiModels.Observation>($"stations/{UserStationModel?.StationId}/observations/latest");
+        var client = Factory.CreateClient("api.weather.gov");
+        ObservationModel = await client.GetFromJsonAsync<Core.ApiModels.Observation>($"stations/{UserStationModel?.StationId}/observations/latest");
     }
 
 }

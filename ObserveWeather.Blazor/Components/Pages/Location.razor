@@ -4,7 +4,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using ObserveWeather.Blazor.Core.ApiModels
 @using ObserveWeather.Blazor.Core.Interfaces
-@inject HttpClient Client
+@inject IHttpClientFactory Factory
 @inject IHttpContextAccessor Context
 @inject ILocationService LocationService
 @rendermode InteractiveServer
@@ -124,7 +124,8 @@
 
     private async Task GetPoints(RealTimeMap.Location location)
     {
-        var result = await Client.GetFromJsonAsync<Point>($"points/{location.latitude},{location.longitude}");
+        var client = Factory.CreateClient("api.weather.gov");
+        var result = await client.GetFromJsonAsync<Point>($"points/{location.latitude},{location.longitude}");
         var userStations = await LocationService.GetForUserAsync(UserId);
 
         if (result != null)

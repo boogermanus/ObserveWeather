@@ -44,16 +44,17 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-builder.Services.AddScoped(s => new HttpClient
-{
-    BaseAddress = new Uri("https://api.weather.gov/"),
-    DefaultRequestHeaders = { {"User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"} }
-});
-// builder.Services.AddHttpClient("api.weather.gov", client =>
+// disabled because this doesn't log requests
+// builder.Services.AddScoped(s => new HttpClient
 // {
-//     client.BaseAddress = new Uri("https://api.weather.gov/");
-//     client.DefaultRequestHeaders.Add("User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"); 
+//     BaseAddress = new Uri("https://api.weather.gov/"),
+//     DefaultRequestHeaders = { {"User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"} },
 // });
+builder.Services.AddHttpClient("api.weather.gov", client =>
+{
+    client.BaseAddress = new Uri("https://api.weather.gov/");
+    client.DefaultRequestHeaders.Add("User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"); 
+});
 builder.Services.AddScoped<IUserStationRepository, UserStationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 
