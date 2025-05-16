@@ -1,14 +1,68 @@
 ﻿@using ObserveWeather.Blazor.Core.ApiModels
 @inject IHttpClientFactory Factory
-<p>@ObservationModel?.Properties.Temperature.Value</p>
+@attribute [StreamRendering]
+
+@if (ObservationModel == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    @if (!_errorLoading)
+    {
+        <div class="row m-2">
+            <div class="col-md-2">
+                <img src="@ObservationModel.Properties.Icon" alt="icon"/>
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Current Conditions</div>
+            <div class="col-md-2">@ObservationModel.Properties.TextDescription</div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Temperature</div>
+            <div class="col-md-2">@(ObservationModel.TemperatureF)&deg;F
+                (@(ObservationModel.Properties.Temperature.Value)&deg;C)
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Humidity</div>
+            <div class="col-md-2">@(ObservationModel.Humidity)%</div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Wind Speed</div>
+            <div class="col-md-2">
+                @ObservationModel.WindDirection 
+                @ObservationModel.WindSpeedMph 
+                @ObservationModel.GustDirection 
+                @(ObservationModel.WindGustMph == 0 ? "" : ObservationModel.WindGustMph) mph
+            </div>
+        </div>
+    }
+    else
+    {
+        <p><em>Error loading data</em></p>
+    }
+}
 @code {
     [Parameter]
     public UserStationModel? UserStationModel { get; set; }
-    private Core.ApiModels.Observation? ObservationModel { get; set; }
+    private ObservationModel? ObservationModel { get; set; }
+    private bool _errorLoading;
     protected override async Task OnInitializedAsync()
     {
-        var client = Factory.CreateClient("api.weather.gov");
-        ObservationModel = await client.GetFromJsonAsync<Core.ApiModels.Observation>($"stations/{UserStationModel?.StationId}/observations/latest");
+        try
+        {
+            var client = Factory.CreateClient("api.weather.gov");
+            ObservationModel = 
+                await client.GetFromJsonAsync<ObservationModel>($"stations/{UserStationModel?.StationId}/observations/latest");
+        }
+        catch (Exception)
+        {
+            ObservationModel = new ObservationModel();
+            _errorLoading = true;
+        }
+
     }
 
 }

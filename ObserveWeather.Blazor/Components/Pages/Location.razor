@@ -54,16 +54,16 @@
 
 @code{
     public required RealTimeMap Map;
-    private Point? _point;
+    private PointModel? _point;
     private const double DefaultLatitude = 33.670;
     private const double DefaultLongitude = -101.820;
     private double _latitude;
     private double _longitude;
     private bool _loading;
     private bool _dataLoaded;
-    private bool _addDisabled = false;
-    private string City => _point?.Properties.RelativeLocation.Properties.City ?? string.Empty;
-    private string State => _point?.Properties.RelativeLocation.Properties.State ?? string.Empty;
+    private bool _addDisabled;
+    private string City => _point?.Properties.RelativeLocationModel.Properties.City ?? string.Empty;
+    private string State => _point?.Properties.RelativeLocationModel.Properties.State ?? string.Empty;
     private string RadarStation => _point?.Properties.RadarStation ?? string.Empty;
     private bool _alreadyHave;
     private string? UserId => Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -125,7 +125,7 @@
     private async Task GetPoints(RealTimeMap.Location location)
     {
         var client = Factory.CreateClient("api.weather.gov");
-        var result = await client.GetFromJsonAsync<Point>($"points/{location.latitude},{location.longitude}");
+        var result = await client.GetFromJsonAsync<PointModel>($"points/{location.latitude},{location.longitude}");
         var userStations = await LocationService.GetForUserAsync(UserId);
 
         if (result != null)

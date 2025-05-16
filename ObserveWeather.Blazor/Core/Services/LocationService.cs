@@ -12,13 +12,13 @@ public class LocationService : ILocationService
     {
         _userStationRepository = userStationRepository;
     }
-    public async Task<UserStationModel?> AddAsync(Point? point, string? userId)
+    public async Task<UserStationModel?> AddAsync(PointModel? point, string? userId)
     {
         ArgumentNullException.ThrowIfNull(point);
         ArgumentNullException.ThrowIfNull(userId);
         
         var displayName =
-            $"{point.Properties.RelativeLocation.Properties.City}, {point.Properties.RelativeLocation.Properties.State}";
+            $"{point.Properties.RelativeLocationModel.Properties.City}, {point.Properties.RelativeLocationModel.Properties.State}";
         var userStation = new UserStation
         {
             StationId = point.Properties.RadarStation,
