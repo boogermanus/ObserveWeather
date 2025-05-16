@@ -13,7 +13,9 @@ public class ObservationModel
     public double VisibilityMiles => Math.Round(Properties.Visibility.Value.Value / 1609, 2) ;
     public double VisibilityKilometers => Properties.Visibility.Value.Value / 1000;
     public double WindChillF => ConvertToFahrenheit(Properties.WindChill.Value);
+    public double WindChillC => Math.Round(Properties.WindChill.Value.Value, 2);
     public double HeatIndexF => ConvertToFahrenheit(Properties.HeatIndex.Value);
+    public double HeatIndexC => Math.Round(Properties.HeatIndex.Value.Value, 2);
     public double Humidity => Math.Round(Properties.RelativeHumidity.Value.Value, 0);
 
     public string WindDirection => ConvertToDirection(Properties.WindDirection.Value);

@@ -62,8 +62,8 @@
     private bool _loading;
     private bool _dataLoaded;
     private bool _addDisabled;
-    private string City => _point?.Properties.RelativeLocationModel.Properties.City ?? string.Empty;
-    private string State => _point?.Properties.RelativeLocationModel.Properties.State ?? string.Empty;
+    private string City => _point?.Properties.RelativeLocation.Properties.City ?? string.Empty;
+    private string State => _point?.Properties.RelativeLocation.Properties.State ?? string.Empty;
     private string RadarStation => _point?.Properties.RadarStation ?? string.Empty;
     private bool _alreadyHave;
     private string? UserId => Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);

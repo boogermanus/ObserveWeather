@@ -2,6 +2,6 @@
 
 public class PointPropertiesModel
 {
-    public RelativeLocationModel RelativeLocationModel { get; set; } = new RelativeLocationModel();
+    public RelativeLocationModel RelativeLocation { get; set; } = new RelativeLocationModel();
     public string RadarStation { get; set; } = string.Empty;
 }

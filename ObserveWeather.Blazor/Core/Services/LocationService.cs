@@ -18,7 +18,7 @@ public class LocationService : ILocationService
         ArgumentNullException.ThrowIfNull(userId);
         
         var displayName =
-            $"{point.Properties.RelativeLocationModel.Properties.City}, {point.Properties.RelativeLocationModel.Properties.State}";
+            $"{point.Properties.RelativeLocation.Properties.City}, {point.Properties.RelativeLocation.Properties.State}";
         var userStation = new UserStation
         {
             StationId = point.Properties.RadarStation,
