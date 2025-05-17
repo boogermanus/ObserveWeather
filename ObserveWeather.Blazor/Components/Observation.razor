@@ -11,9 +11,12 @@ else
     @if (!_errorLoading)
     {
         <div class="row m-2">
-            <div class="col-md-2">
-                <img src="@ObservationModel.Properties.Icon" alt="icon"/>
-            </div>
+            @if (!string.IsNullOrWhiteSpace(ObservationModel.Properties.Icon))
+            {
+                <div class="col-md-2">
+                    <img src="@ObservationModel.Properties.Icon" alt="icon"/>
+                </div>
+            }
             <div class="col-md-2">@ObservationModel.Properties.Timestamp</div>
         </div>
         <div class="row m-2">
