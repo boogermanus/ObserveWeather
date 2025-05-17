@@ -10,77 +10,72 @@ else
 {
     @if (!_errorLoading)
     {
-        <div class="card">
-            <div class="card-body" >
-                <div class="card-body">
-                    <div class="row m-2">
-                        <div class="col-md-2">
-                            <img src="@ObservationModel.Properties.Icon" alt="icon"/>
-                        </div>
-                        <div class="col-md-2">@ObservationModel.Properties.Timestamp</div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-2">Current Conditions</div>
-                        <div class="col-md-2">@ObservationModel.Properties.TextDescription</div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-2">Temperature</div>
-                        <div class="col-md-2">@(ObservationModel.TemperatureF)&deg;F
-                            (@(ObservationModel.Properties.Temperature.Value)&deg;C)
-                        </div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-2">Humidity</div>
-                        <div class="col-md-2">@(ObservationModel.Humidity)%</div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-2">Wind Speed</div>
-                        <div class="col-md-2">
-                            @ObservationModel.WindDirection
-                            @ObservationModel.WindSpeedMph
-                            @ObservationModel.GustDirection
-                            @(ObservationModel.WindGustMph == 0 ? "" : ObservationModel.WindGustMph) mph
-                        </div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-2">Barometer</div>
-                        <div class="col-md-2">
-                            @(ObservationModel.PressureHgIn) in (@ObservationModel.PressureBar mb)
-                        </div>
-                    </div>
-                    <div class="row m-2">
-                        <div class="col-md-2">Dewpoint</div>
-                        <div class="col-md-2">
-                            @(ObservationModel.DewpointF)&deg;F (@(ObservationModel.Properties.Dewpoint.Value)&deg;C)
-                        </div>
-                    </div>
-                    @if (ObservationModel.Properties.HeatIndex.Value.HasValue)
-                    {
-                        <div class="row m-2">
-                            <div class="col-md-2">Heat Index</div>
-                            <div class="col-md-2">
-                                @(ObservationModel.HeatIndexF)&deg;F (@(ObservationModel.HeatIndexC)&deg;C)
-                            </div>
-                        </div>
-                    }
-
-                    @if (ObservationModel.Properties.WindChill.Value.HasValue)
-                    {
-                        <div class="row m-2">
-                            <div class="col-md-2">Wind Chill</div>
-                            <div class="col-md-2">
-                                @(ObservationModel.WindChillF)&deg;F (@(ObservationModel.WindChillC)&deg;C)
-                            </div>
-                        </div>
-                    }
-
-                    <div class="row m-2">
-                        <div class="col-md-2">Visibility</div>
-                        <div class="col-md-2">
-                            @ObservationModel.VisibilityMiles mi (@ObservationModel.VisibilityKilometers km)
-                        </div>
-                    </div>
+        <div class="row m-2">
+            <div class="col-md-2">
+                <img src="@ObservationModel.Properties.Icon" alt="icon"/>
+            </div>
+            <div class="col-md-2">@ObservationModel.Properties.Timestamp</div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Current Conditions</div>
+            <div class="col-md-2">@ObservationModel.Properties.TextDescription</div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Temperature</div>
+            <div class="col-md-2">@(ObservationModel.TemperatureF)&deg;F
+                (@(ObservationModel.Properties.Temperature.Value)&deg;C)
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Humidity</div>
+            <div class="col-md-2">@(ObservationModel.Humidity)%</div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Wind Speed</div>
+            <div class="col-md-2">
+                @ObservationModel.WindDirection
+                @ObservationModel.WindSpeedMph
+                @ObservationModel.GustDirection
+                @(ObservationModel.WindGustMph == 0 ? "" : ObservationModel.WindGustMph) mph
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Barometer</div>
+            <div class="col-md-2">
+                @(ObservationModel.PressureHgIn) in (@ObservationModel.PressureBar mb)
+            </div>
+        </div>
+        <div class="row m-2">
+            <div class="col-md-2">Dewpoint</div>
+            <div class="col-md-2">
+                @(ObservationModel.DewpointF)&deg;F (@(ObservationModel.Properties.Dewpoint.Value)&deg;C)
+            </div>
+        </div>
+        @if (ObservationModel.Properties.HeatIndex.Value.HasValue)
+        {
+            <div class="row m-2">
+                <div class="col-md-2">Heat Index</div>
+                <div class="col-md-2">
+                    @(ObservationModel.HeatIndexF)&deg;F (@(ObservationModel.HeatIndexC)&deg;C)
                 </div>
+            </div>
+        }
+
+        @if (ObservationModel.Properties.WindChill.Value.HasValue)
+        {
+            <div class="row m-2">
+                <div class="col-md-2">Wind Chill</div>
+                <div class="col-md-2">
+                    @(ObservationModel.WindChillF)&deg;F (@(ObservationModel.WindChillC)&deg;C)
+                </div>
+            </div>
+        }
+        
+
+        <div class="row m-2">
+            <div class="col-md-2">Visibility</div>
+            <div class="col-md-2">
+                @ObservationModel.VisibilityMiles mi (@ObservationModel.VisibilityKilometers km)
             </div>
         </div>
     }

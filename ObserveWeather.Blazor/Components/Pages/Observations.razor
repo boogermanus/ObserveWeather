@@ -2,8 +2,8 @@
 @using System.Security.Claims
 @using ObserveWeather.Blazor.Core.ApiModels
 @using ObserveWeather.Blazor.Core.Interfaces
+@inherits UserComponent
 @rendermode InteractiveServer
-@inject IHttpContextAccessor Context
 @inject ILocationService LocationService
 
 <PageTitle>Observations</PageTitle>
@@ -19,14 +19,18 @@
     {
         foreach (var station in _stations)
         {
-            <div class="row m-2">
-                <div class="col-md-2">@station.DisplayName</div>
-                <div class="col-md-1">
-                    <button class="btn btn-primary" @onclick="() => Delete(station)">Delete</button>
+            <div class="card m-2">
+                <div class="card-body">
+                    <div class="card-title">@station.DisplayName - @station.StationId</div>
+                    <div class="row m-2">
+                        <div class="col-md-1">
+                            <button class="btn btn-primary" @onclick="() => Delete(station)">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <Observation UserStationModel="@station"></Observation>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <Observation UserStationModel="@station"></Observation>
             </div>
         }
     }
@@ -34,7 +38,8 @@
 
 @code {
     private IEnumerable<UserStationModel>? _stations;
-    private string? UserId => Context.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    private string? UserId => HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
     protected override async Task OnInitializedAsync()
     {
         _stations =
