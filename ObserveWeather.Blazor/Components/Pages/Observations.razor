@@ -40,18 +40,17 @@
 
 @code {
     private IEnumerable<UserStationModel>? _stations;
-    private string? UserId => HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
     protected override async Task OnInitializedAsync()
     {
         _stations =
-            await LocationService.GetForUserAsync(UserId);
+            await LocationService.GetForUserAsync(await UserId());
     }
 
     private async Task Delete(UserStationModel model)
     {
         await LocationService.DeleteAsync(model);
-        _stations = await LocationService.GetForUserAsync(UserId);
+        _stations = await LocationService.GetForUserAsync(await UserId());
     }
 
 }

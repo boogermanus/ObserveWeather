@@ -1,5 +1,4 @@
 ﻿@page "/Location"
-@using System.Security.Claims
 @using LeafletForBlazor
 @using Microsoft.AspNetCore.Authorization
 @using ObserveWeather.Blazor.Core.ApiModels
@@ -7,7 +6,6 @@
 @inherits UserComponent
 @inject ILocationService LocationService
 @inject IObservationService ObservationService
-@inject AuthenticationStateProvider AuthenticationStateProvider
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -27,27 +25,20 @@
             <div class="col-sm-2">Longitude: @_longitude</div>
         </div>
 
-        @if (_point == null && _loading)
+        @if (_stationId == null && _loading)
         {
             <p><em>Loading...</em></p>
         }
         else
         {
-            if (_dataLoaded && !_alreadyHave)
+            @if (_dataLoaded)
             {
                 <div class="row">
                     <div class="col-md-6">
-                        @City, @State - @RadarStation
+                        @_displayName - @_stationId
                         <button class="btn btn-primary" @onclick="Add" disabled="@_addDisabled">Add</button>
                     </div>
                 </div>
-            }
-            else
-            {
-                @if (_dataLoaded)
-                {
-                    <p>You've already added this location</p>
-                }
             }
         }
     </div>
@@ -60,16 +51,12 @@
     private const double DefaultLongitude = -101.820;
     private double _latitude;
     private double _longitude;
+    private ZoneModel? _zoneModel;
+    private string? _stationId;
+    private string? _displayName;
     private bool _loading;
     private bool _dataLoaded;
     private bool _addDisabled;
-    private string City => _point?.Properties.RelativeLocation.Properties.City ?? string.Empty;
-    private string State => _point?.Properties.RelativeLocation.Properties.State ?? string.Empty;
-    private string RadarStation => _point?.Properties.RadarStation ?? string.Empty;
-    private bool _alreadyHave;
-    private string? UserId => HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-    private bool _errorOnObservation;
-    private ZoneModel? _zoneModel = null;
 
     private readonly RealTimeMap.LoadParameters _parameters = new()
     {
@@ -79,7 +66,7 @@
             [
                 new RealTimeMap.BasemapLayer
                 {
-                    url = "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                    url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
                     attribution = "©Open Street Map",
                     title = "Open Street Map",
                     detectRetina = true
@@ -112,70 +99,56 @@
 
     public async Task OnClickMap(RealTimeMap.ClicksMapArgs args)
     {
-        _point = null;
-        _loading = true;
-        _dataLoaded = false;
-        var location = args.location;
         _addDisabled = false;
+        _loading = true;
+        _point = null;
+        var location = args.location;
         await Map.movePoint([location.latitude, location.longitude]);
         _latitude = Math.Round(location.latitude, 3);
         _longitude = Math.Round(location.longitude, 3);
-        await GetPoints(location);
+        await GetStation(location);
         _loading = false;
         _dataLoaded = true;
     }
 
-    private async Task GetPoints(RealTimeMap.Location location)
+    private async Task GetStation(RealTimeMap.Location location)
     {
         var result = await LocationService.GetPointAsync(location.latitude, location.longitude);
-        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var userId = state.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        Console.WriteLine($"userId: {userId}");
-        //var userStations = await LocationService.GetForUserAsync(UserId);
-
-        Console.WriteLine($"Result {result?.Id}");
+        var userStations = await LocationService.GetForUserAsync(await UserId());
         if (result != null)
         {
-            _point = result;
-        }
-    }
-
-    private async Task Add()
-    {
-        UserStationModel? model = null;
-        try
-        {
-            model = await LocationService.AddAsync(_point, UserId);
-            await ObservationService.GetObservation(model?.StationId ?? string.Empty);
-            _addDisabled = true;
-        }
-        catch (HttpRequestException e)
-        {
-            _errorOnObservation = true;
-            
-            if (model != null)
+            // can this station be loaded?
+            try
             {
-                await LocationService.DeleteAsync(model);
-                await AlternativeAdd(_point);
+                await ObservationService.GetObservation(result.Properties.RadarStation);
+                _stationId = result.Properties.RadarStation;
+                _displayName =
+                    $"{result.Properties.RelativeLocation.Properties.City}, {result.Properties.RelativeLocation.Properties.State}";
             }
-        }
-    }
-
-    private async Task AlternativeAdd(PointModel? model)
-    {
-        if (model != null)
-        {
-            var client = HttpClientFactory.CreateClient("api.weather.gov");
-            _zoneModel = await client.GetFromJsonAsync<ZoneModel>(model.Properties.ForecastZone);
-            var firstStation = _zoneModel?.Properties.ObservationStations.First();
-            var station = await client.GetFromJsonAsync<StationModel>(firstStation);
-
-            if (station != null)
+            catch (HttpRequestException)
             {
-                await LocationService.AddAsync(station.Properties.StationIdentifier, station.Properties.Name, UserId);
+                var client = HttpClientFactory.CreateClient("api.weather.gov");
+                _zoneModel = await client.GetFromJsonAsync<ZoneModel>(result.Properties.ForecastZone);
+                var firstStation = _zoneModel?.Properties.ObservationStations.First();
+                var station = await client.GetFromJsonAsync<StationModel>(firstStation);
+
+                if (station != null)
+                {
+                    _stationId = station.Properties.StationIdentifier;
+                    _displayName = station.Properties.Name;
+                }
+            }
+
+            if (userStations.Any(us => us.StationId == _stationId))
+            {
                 _addDisabled = true;
             }
         }
     }
 
+    private async Task Add()
+    {
+        await LocationService.AddAsync(_stationId, _displayName, await UserId());
+        _addDisabled = true;
+    }
 }
