@@ -71,6 +71,12 @@ else
 
 //app.UseHttpsRedirection();
 app.MapBlazorHub("apps/observations");
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyMethod();
+    options.AllowAnyOrigin();
+});
 app.UseStaticFiles();
 app.UseAntiforgery();
 
