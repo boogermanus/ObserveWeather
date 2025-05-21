@@ -44,12 +44,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options =>
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
-// disabled because this doesn't log requests
-// builder.Services.AddScoped(s => new HttpClient
-// {
-//     BaseAddress = new Uri("https://api.weather.gov/"),
-//     DefaultRequestHeaders = { {"User-Agent", "(observeweather.permutate.us, boogermanus@gmail.com)"} },
-// });
+
 builder.Services.AddHttpClient("api.weather.gov", client =>
 {
     client.BaseAddress = new Uri("https://api.weather.gov/");
@@ -74,7 +69,7 @@ else
 }
 
 //app.UseHttpsRedirection();
-
+app.MapBlazorHub("apps/observations");
 app.UseStaticFiles();
 app.UseAntiforgery();
 
