@@ -54,6 +54,7 @@ builder.Services.AddHttpClient("api.weather.gov", client =>
 builder.Services.AddScoped<IUserStationRepository, UserStationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IObservationService, ObservationService>();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -70,13 +71,12 @@ else
 }
 
 //app.UseHttpsRedirection();
-app.MapBlazorHub("apps/observations");
-app.UseCors(options =>
-{
-    options.AllowAnyHeader();
-    options.AllowAnyMethod();
-    options.AllowAnyOrigin();
-});
+// app.UseCors(options =>
+// {
+//     options.AllowAnyHeader();
+//     options.AllowAnyMethod();
+//     options.AllowAnyOrigin();
+// });
 app.UseStaticFiles();
 app.UseAntiforgery();
 
