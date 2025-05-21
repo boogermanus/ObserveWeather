@@ -129,6 +129,7 @@
         var result = await LocationService.GetPointAsync(location.latitude, location.longitude);
         // var userStations = await LocationService.GetForUserAsync(UserId);
 
+        Console.WriteLine($"Result {result?.Id}");
         if (result != null)
         {
             _point = result;
