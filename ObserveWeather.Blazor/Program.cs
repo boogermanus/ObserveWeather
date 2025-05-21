@@ -9,7 +9,7 @@ using ObserveWeather.Blazor.Data;
 using ObserveWeather.Blazor.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseStaticWebAssets();
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
