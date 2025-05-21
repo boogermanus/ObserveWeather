@@ -77,7 +77,7 @@ else
 //     options.AllowAnyMethod();
 //     options.AllowAnyOrigin();
 // });
-app.UsePathBase("/apps/observations");
+app.UsePathBase("/apps/observations/");
 app.UseStaticFiles();
 app.UseAntiforgery();
 
