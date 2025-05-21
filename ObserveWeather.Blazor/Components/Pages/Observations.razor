@@ -1,7 +1,9 @@
 ﻿@page "/Observations"
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Authorization
 @using ObserveWeather.Blazor.Core.ApiModels
 @using ObserveWeather.Blazor.Core.Interfaces
+@attribute [Authorize]
 @inherits UserComponent
 @rendermode InteractiveServer
 @inject ILocationService LocationService
