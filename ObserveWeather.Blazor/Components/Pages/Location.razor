@@ -7,6 +7,7 @@
 @inherits UserComponent
 @inject ILocationService LocationService
 @inject IObservationService ObservationService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -127,7 +128,10 @@
     private async Task GetPoints(RealTimeMap.Location location)
     {
         var result = await LocationService.GetPointAsync(location.latitude, location.longitude);
-        // var userStations = await LocationService.GetForUserAsync(UserId);
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userId = state.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        Console.WriteLine($"userId: {userId}");
+        //var userStations = await LocationService.GetForUserAsync(UserId);
 
         Console.WriteLine($"Result {result?.Id}");
         if (result != null)
