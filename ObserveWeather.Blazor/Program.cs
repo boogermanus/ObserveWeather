@@ -9,6 +9,7 @@ using ObserveWeather.Blazor.Data;
 using ObserveWeather.Blazor.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("http://localhost:5008");
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
