@@ -35,6 +35,11 @@
                 </div>
             </div>
         }
+        
+        @if (!_stations.Any())
+        {
+            <p><em>You have not added any stations</em></p>
+        }
     }
 </div>
 

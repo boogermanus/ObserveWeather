@@ -9,7 +9,11 @@ using ObserveWeather.Blazor.Data;
 using ObserveWeather.Blazor.Data.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseStaticWebAssets();
+// this is the dumbest thing I have ever seen;
+// in order to get an app working in a production environment you have to add this
+if(builder.Environment.IsProduction())
+    builder.WebHost.UseStaticWebAssets();
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
