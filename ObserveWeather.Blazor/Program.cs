@@ -80,6 +80,7 @@ else
 app.UsePathBase("/apps/observations/");
 app.UseStaticFiles();
 app.UseAntiforgery();
+app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
