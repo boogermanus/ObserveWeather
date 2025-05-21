@@ -127,19 +127,11 @@
     private async Task GetPoints(RealTimeMap.Location location)
     {
         var result = await LocationService.GetPointAsync(location.latitude, location.longitude);
-        var userStations = await LocationService.GetForUserAsync(UserId);
+        // var userStations = await LocationService.GetForUserAsync(UserId);
 
         if (result != null)
         {
-            if (userStations.Any(us => us.StationId == result.Properties.RadarStation))
-            {
-                _alreadyHave = true;
-            }
-            else
-            {
-                _point = result;
-                _alreadyHave = false;
-            }
+            _point = result;
         }
     }
 
