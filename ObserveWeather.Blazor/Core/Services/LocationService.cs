@@ -34,6 +34,23 @@ public class LocationService : ILocationService
         return result?.ToApiModel();
     }
 
+    public async Task<UserStationModel?> AddAsync(string stationId, string stationName, string? userId)
+    {
+        ArgumentNullException.ThrowIfNull(stationId);
+        ArgumentNullException.ThrowIfNull(stationName);
+        ArgumentNullException.ThrowIfNull(userId);
+
+        var userStation = new UserStation
+        {
+            StationId = stationId,
+            DisplayName = stationName,
+            UserId = userId
+        };
+        
+        var result = await _userStationRepository.AddAsync(userStation);
+        return result?.ToApiModel();
+    }
+
     public async Task<IEnumerable<UserStationModel>> GetForUserAsync(string? userId)
     {
         ArgumentNullException.ThrowIfNull(userId);

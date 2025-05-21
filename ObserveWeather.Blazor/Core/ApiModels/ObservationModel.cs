@@ -9,14 +9,17 @@ public class ObservationModel
     public double WindSpeedMph => ConvertToMph(Properties.WindSpeed.Value);
     public double WindGustMph => ConvertToMph(Properties.WingGust.Value);
     public double? PressureBar => Properties.BarometricPressure.Value / 100;
-    public double PressureHgIn => Math.Round(Properties.BarometricPressure.Value.Value / 3386, 2);
+
+    public double PressureHgIn => Properties.BarometricPressure.Value.HasValue
+        ? Math.Round(Properties.BarometricPressure.Value.Value / 3386, 2)
+        : 0;
     public double VisibilityMiles => Math.Round(Properties.Visibility.Value.Value / 1609, 2) ;
     public double VisibilityKilometers => Properties.Visibility.Value.Value / 1000;
     public double WindChillF => ConvertToFahrenheit(Properties.WindChill.Value);
-    public double WindChillC => Math.Round(Properties.WindChill.Value.Value, 2);
+    public double WindChillC => Math.Round(Properties.WindChill.Value ?? 0, 2);
     public double HeatIndexF => ConvertToFahrenheit(Properties.HeatIndex.Value);
-    public double HeatIndexC => Math.Round(Properties.HeatIndex.Value.Value, 2);
-    public double Humidity => Math.Round(Properties.RelativeHumidity.Value.Value, 0);
+    public double HeatIndexC => Math.Round(Properties.HeatIndex.Value ?? 0, 2);
+    public double Humidity => Math.Round(Properties.RelativeHumidity.Value ?? 0, 0);
 
     public string WindDirection => ConvertToDirection(Properties.WindDirection.Value);
     public string GustDirection => ConvertToDirection(Properties.WingGust.Value);

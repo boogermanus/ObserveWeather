@@ -57,6 +57,7 @@ builder.Services.AddHttpClient("api.weather.gov", client =>
 });
 builder.Services.AddScoped<IUserStationRepository, UserStationRepository>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<IObservationService, ObservationService>();
 
 var app = builder.Build();
 

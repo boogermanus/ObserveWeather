@@ -1,5 +1,6 @@
 ﻿@using ObserveWeather.Blazor.Core.ApiModels
-@inject IHttpClientFactory Factory
+@using ObserveWeather.Blazor.Core.Interfaces
+@inject IObservationService ObservationService
 @attribute [StreamRendering]
 
 @if (ObservationModel == null)
@@ -97,9 +98,7 @@ else
     {
         try
         {
-            var client = Factory.CreateClient("api.weather.gov");
-            ObservationModel =
-                await client.GetFromJsonAsync<ObservationModel>($"stations/{UserStationModel?.StationId}/observations/latest");
+            ObservationModel = await ObservationService.GetObservation(UserStationModel?.StationId ?? string.Empty);
         }
         catch (Exception)
         {

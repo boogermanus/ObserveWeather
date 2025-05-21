@@ -6,6 +6,7 @@
 @using ObserveWeather.Blazor.Core.Interfaces
 @inherits UserComponent
 @inject ILocationService LocationService
+@inject IObservationService ObservationService
 @rendermode InteractiveServer
 @attribute [Authorize]
 
@@ -66,6 +67,8 @@
     private string RadarStation => _point?.Properties.RadarStation ?? string.Empty;
     private bool _alreadyHave;
     private string? UserId => HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+    private bool _errorOnObservation;
+    private ZoneModel? _zoneModel = null;
 
     private readonly RealTimeMap.LoadParameters _parameters = new()
     {
@@ -142,8 +145,40 @@
 
     private async Task Add()
     {
-        await LocationService.AddAsync(_point, UserId);
-        _addDisabled = true;
+        UserStationModel? model = null;
+        try
+        {
+            model = await LocationService.AddAsync(_point, UserId);
+            await ObservationService.GetObservation(model?.StationId ?? string.Empty);
+            _addDisabled = true;
+        }
+        catch (HttpRequestException e)
+        {
+            _errorOnObservation = true;
+            
+            if (model != null)
+            {
+                await LocationService.DeleteAsync(model);
+                await AlternativeAdd(_point);
+            }
+        }
+    }
+
+    private async Task AlternativeAdd(PointModel? model)
+    {
+        if (model != null)
+        {
+            var client = HttpClientFactory.CreateClient("api.weather.gov");
+            _zoneModel = await client.GetFromJsonAsync<ZoneModel>(model.Properties.ForecastZone);
+            var firstStation = _zoneModel?.Properties.ObservationStations.First();
+            var station = await client.GetFromJsonAsync<StationModel>(firstStation);
+
+            if (station != null)
+            {
+                await LocationService.AddAsync(station.Properties.StationIdentifier, station.Properties.Name, UserId);
+                _addDisabled = true;
+            }
+        }
     }
 
 }
