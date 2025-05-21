@@ -11,6 +11,7 @@ public class UserComponent : ComponentBase
 
     [Inject]
     protected IHttpClientFactory HttpClientFactory { get; set; } = default!;
+    
     protected async Task<string?> UserId() =>
         (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User
         .FindFirstValue(ClaimTypes.NameIdentifier);

@@ -39,6 +39,10 @@
                         <button class="btn btn-primary" @onclick="Add" disabled="@_addDisabled">Add</button>
                     </div>
                 </div>
+                @if (_addDisabled)
+                {
+                    <p><em>You have added this location</em></p>
+                }
             }
         }
     </div>
@@ -117,9 +121,10 @@
         var userStations = await LocationService.GetForUserAsync(await UserId());
         if (result != null)
         {
-            // can this station be loaded?
+
             try
             {
+                // can this station be loaded?
                 await ObservationService.GetObservation(result.Properties.RadarStation);
                 _stationId = result.Properties.RadarStation;
                 _displayName =
@@ -127,6 +132,8 @@
             }
             catch (HttpRequestException)
             {
+                // the observations could not be loaded, so we will find the zone and use the first
+                // observation station from it
                 var client = HttpClientFactory.CreateClient("api.weather.gov");
                 _zoneModel = await client.GetFromJsonAsync<ZoneModel>(result.Properties.ForecastZone);
                 var firstStation = _zoneModel?.Properties.ObservationStations.First();
