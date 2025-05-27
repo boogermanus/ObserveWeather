@@ -46,7 +46,7 @@ else
         <div class="row m-2">
             <div class="col-md-2">Barometer</div>
             <div class="col-md-2">
-                @(ObservationModel.PressureHgIn) in (@ObservationModel.PressureBar mb)
+                @ObservationModel.PressureString
             </div>
         </div>
         <div class="row m-2">
@@ -79,7 +79,7 @@ else
         <div class="row m-2">
             <div class="col-md-2">Visibility</div>
             <div class="col-md-2">
-                @ObservationModel.VisibilityMiles mi (@ObservationModel.VisibilityKilometers km)
+                @ObservationModel.VisibilityString
             </div>
         </div>
     }
