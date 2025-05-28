@@ -12,8 +12,18 @@ public class UserComponent : ComponentBase
     [Inject]
     protected IHttpClientFactory HttpClientFactory { get; set; } = default!;
     
-    protected async Task<string?> UserId() =>
-        (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User
-        .FindFirstValue(ClaimTypes.NameIdentifier);
+    // protected async Task<string?> UserId() =>
+    //     (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User
+    //     .FindFirstValue(ClaimTypes.NameIdentifier);
+    private string? _userId = string.Empty;
+    protected string? UserId => _userId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _userId =
+            (await AuthenticationStateProvider.GetAuthenticationStateAsync()).User.FindFirstValue(ClaimTypes
+                .NameIdentifier);  
+        await base.OnInitializedAsync();
+    }
 
 }

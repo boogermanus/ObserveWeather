@@ -118,7 +118,7 @@
     private async Task GetStation(RealTimeMap.Location location)
     {
         var result = await LocationService.GetPointAsync(location.latitude, location.longitude);
-        var userStations = await LocationService.GetForUserAsync(await UserId());
+        var userStations = await LocationService.GetForUserAsync(UserId);
         if (result != null)
         {
 
@@ -155,7 +155,7 @@
 
     private async Task Add()
     {
-        await LocationService.AddAsync(_stationId, _displayName, await UserId());
+        await LocationService.AddAsync(_stationId, _displayName, UserId);
         _addDisabled = true;
     }
 }
