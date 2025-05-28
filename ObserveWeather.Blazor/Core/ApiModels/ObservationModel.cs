@@ -16,7 +16,7 @@ public class ObservationModel
         : 0;
     private string? PressureHgString => PressureBar != 0 ? $"{PressureHgIn} in" : null;
     public string PressureString =>
-        Properties.BarometricPressure.Value.HasValue ? $"{PressureHgIn} ({PressureHgString})" : "n/a";
+        Properties.BarometricPressure.Value.HasValue ? $"{PressureHgString} ({PressureBarString})" : "n/a";
 
     private double VisibilityMiles => Properties.Visibility.Value.HasValue
         ? Math.Round(Properties.Visibility.Value.Value / 1609, 2)
