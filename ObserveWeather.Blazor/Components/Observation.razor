@@ -46,10 +46,10 @@ else
         <div class="row m-2">
             <div class="col-md-2">Wind Speed</div>
             <div class="col-md-2">
-                @ObservationModel.WindDirection
-                @ObservationModel.WindSpeedMph
+                @(ObservationModel.WindSpeedMph == 0 ? "" : ObservationModel.WindDirection)
+                @(ObservationModel.WindSpeedMph == 0 ? "Calm" : $"{ObservationModel.WindSpeedMph} mph")
                 @ObservationModel.GustDirection
-                @(ObservationModel.WindGustMph == 0 ? "" : ObservationModel.WindGustMph) mph
+                @(ObservationModel.WindGustMph == 0 ? "" : $"G {ObservationModel.WindGustMph} mph") 
             </div>
         </div>
         <div class="row m-2">
