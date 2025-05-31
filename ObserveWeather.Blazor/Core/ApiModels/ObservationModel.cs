@@ -4,8 +4,8 @@ public class ObservationModel
 {
     public string Id { get; set; } = string.Empty;
     public ObservationPropertiesModel Properties { get; set; } = new ObservationPropertiesModel();
-    public double TemperatureF => ConvertToFahrenheit(Properties.Temperature.Value);
-    public double DewpointF => ConvertToFahrenheit(Properties.Dewpoint.Value);
+    public double? TemperatureF => ConvertToFahrenheit(Properties.Temperature.Value);
+    public double? DewpointF => ConvertToFahrenheit(Properties.Dewpoint.Value);
     public double WindSpeedMph => ConvertToMph(Properties.WindSpeed.Value);
     public double WindGustMph => ConvertToMph(Properties.WingGust.Value);
     public double PressureBar =>
@@ -31,15 +31,18 @@ public class ObservationModel
         ? $"{VisibilityMilesString} ({VisibilityKilometersString})"
         : "n/a";
 
-    public double WindChillF => ConvertToFahrenheit(Properties.WindChill.Value);
+    public double? WindChillF => ConvertToFahrenheit(Properties.WindChill.Value);
     public double WindChillC => Math.Round(Properties.WindChill.Value ?? 0, 2);
-    public double HeatIndexF => ConvertToFahrenheit(Properties.HeatIndex.Value);
+    public double? HeatIndexF => ConvertToFahrenheit(Properties.HeatIndex.Value);
     public double HeatIndexC => Math.Round(Properties.HeatIndex.Value ?? 0, 2);
-    public double Humidity => Math.Round(Properties.RelativeHumidity.Value ?? 0, 0);
+
+    public double? Humidity => Properties.RelativeHumidity.Value.HasValue
+        ? Math.Round(Properties.RelativeHumidity.Value.Value, 0)
+        : null;
 
     public string WindDirection => ConvertToDirection(Properties.WindDirection.Value);
     public string GustDirection => ConvertToDirection(Properties.WingGust.Value);
-    private double ConvertToFahrenheit(double? celsius) => celsius != null ? Math.Round(celsius.Value * 9 / 5 + 32, 2) : 0;
+    private double? ConvertToFahrenheit(double? celsius) => celsius != null ? Math.Round(celsius.Value * 9 / 5 + 32, 2) : null;
     private double ConvertToMph(double? kph) => kph != null ? Math.Round(kph.Value / 1.609, 0) : 0;
     
     private static string ConvertToDirection(double? degrees)

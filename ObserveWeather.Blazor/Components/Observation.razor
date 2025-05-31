@@ -26,13 +26,22 @@ else
         </div>
         <div class="row m-2">
             <div class="col-md-2">Temperature</div>
-            <div class="col-md-2">@(ObservationModel.TemperatureF)&deg;F
-                (@(ObservationModel.Properties.Temperature.Value)&deg;C)
-            </div>
+
+            @if (ObservationModel.TemperatureF.HasValue)
+            {
+                <div class="col-md-2">
+                    @(ObservationModel.TemperatureF)&deg;F
+                    (@(ObservationModel.Properties.Temperature.Value)&deg;C)
+                </div>
+            }
+            else
+            {
+                <div class="col-md-2">n/a</div>
+            }
         </div>
         <div class="row m-2">
             <div class="col-md-2">Humidity</div>
-            <div class="col-md-2">@(ObservationModel.Humidity)%</div>
+            <div class="col-md-2">@(ObservationModel.Humidity.HasValue ? $"{ObservationModel.Humidity}%" : "n/a")</div>
         </div>
         <div class="row m-2">
             <div class="col-md-2">Wind Speed</div>
@@ -74,7 +83,7 @@ else
                 </div>
             </div>
         }
-        
+
 
         <div class="row m-2">
             <div class="col-md-2">Visibility</div>
@@ -106,5 +115,4 @@ else
             _errorLoading = true;
         }
     }
-
 }
