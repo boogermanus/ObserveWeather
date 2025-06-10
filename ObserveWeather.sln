@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObserveWeather.Blazor", "ObserveWeather.Blazor\ObserveWeather.Blazor.csproj", "{0D8A08FF-B8AF-4D25-9241-CDCE5CF1FBC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObserveWeather.Core", "ObserveWeather.Core\ObserveWeather.Core.csproj", "{6E491831-A00B-4DB6-B206-508584D385CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObserveWeather.Infrastructure", "ObserveWeather.Infrastructure\ObserveWeather.Infrastructure.csproj", "{30511F4C-D824-478C-BB2A-47099834E754}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{0D8A08FF-B8AF-4D25-9241-CDCE5CF1FBC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D8A08FF-B8AF-4D25-9241-CDCE5CF1FBC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D8A08FF-B8AF-4D25-9241-CDCE5CF1FBC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E491831-A00B-4DB6-B206-508584D385CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E491831-A00B-4DB6-B206-508584D385CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E491831-A00B-4DB6-B206-508584D385CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E491831-A00B-4DB6-B206-508584D385CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30511F4C-D824-478C-BB2A-47099834E754}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30511F4C-D824-478C-BB2A-47099834E754}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30511F4C-D824-478C-BB2A-47099834E754}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30511F4C-D824-478C-BB2A-47099834E754}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

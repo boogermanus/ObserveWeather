@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using ObserveWeather.Blazor.Data;
+using ObserveWeather.Core.Models;
+
 
 namespace ObserveWeather.Blazor.Components.Account;
 

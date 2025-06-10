@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using ObserveWeather.Blazor.Components.Account.Pages;
 using ObserveWeather.Blazor.Components.Account.Pages.Manage;
-using ObserveWeather.Blazor.Data;
+using ObserveWeather.Core.Models;
+using ObserveWeather.Blazor.Components.Account.Pages;
+using ObserveWeather.Blazor.Components.Account.Pages.Manage;
 
 namespace Microsoft.AspNetCore.Routing;
 
