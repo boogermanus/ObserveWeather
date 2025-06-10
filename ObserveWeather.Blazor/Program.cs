@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ObserveWeather.Blazor.Components;
 using ObserveWeather.Blazor.Components.Account;
-using ObserveWeather.Blazor.Core.Interfaces;
-using ObserveWeather.Blazor.Core.Services;
-using ObserveWeather.Blazor.Data;
-using ObserveWeather.Blazor.Data.Repositories;
+using ObserveWeather.Core.Interfaces;
+using ObserveWeather.Core.Models;
+using ObserveWeather.Core.Services;
+using ObserveWeather.Infrastructure;
+using ObserveWeather.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 // this is the dumbest thing I have ever seen;

@@ -20,4 +20,9 @@
     <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css.map" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ObserveWeather.Core\ObserveWeather.Core.csproj" />
+    <ProjectReference Include="..\ObserveWeather.Infrastructure\ObserveWeather.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
